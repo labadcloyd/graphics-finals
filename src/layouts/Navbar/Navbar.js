@@ -4,7 +4,8 @@ export default function Navbar() {
     <div className={styles.wrapper}>
       <div className={styles.container}>
         <div>
-          <h4>Midpoint Ellipse</h4>
+          <h4>Sketchpad</h4>
+          <p>Midpoint Ellipse</p>
         </div>
         <div></div>
       </div>
