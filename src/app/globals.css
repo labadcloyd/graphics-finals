@@ -14,14 +14,15 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: "Outfit", sans-serif;
-  font-optical-sizing: auto;
 }
 
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
 }
 
 a {

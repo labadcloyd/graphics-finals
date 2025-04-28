@@ -1,4 +1,5 @@
 "use client";
+import { v4 as uuidv4 } from "uuid";
 import { useRef, useEffect, useState } from "react";
 import css from "./styles.module.css";
 import midpointEllipse from "@/utils/midpointAlgo";
@@ -10,7 +11,16 @@ export default function Sketchpad() {
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [isDrawing, setIsDrawing] = useState(false);
   const [isActive, setIsActive] = useState(false);
+  const [layerCount, setLayerCount] = useState(0);
   const [permanentEllipses, setPermanentEllipses] = useState([]);
+
+  function handleDeleteLayer(id) {
+    const newPermEllips = [];
+    permanentEllipses.forEach((item) => {
+      if (item.id !== id) newPermEllips.push(item);
+    });
+    setPermanentEllipses(newPermEllips);
+  }
 
   useEffect(() => {
     if (!isActive) return;
@@ -89,7 +99,11 @@ export default function Sketchpad() {
         const finalPoints = midpointEllipse(rx, ry, xc, yc);
 
         // Save the final ellipse to permanentEllipses
-        setPermanentEllipses((prev) => [...prev, { points: finalPoints }]);
+        setLayerCount(layerCount + 1);
+        setPermanentEllipses((prev) => [
+          ...prev,
+          { points: finalPoints, id: uuidv4(), sequence: layerCount },
+        ]);
       }
 
       canvas.addEventListener("mousedown", handleMouseDown);
@@ -126,11 +140,22 @@ export default function Sketchpad() {
 
   return (
     <div className={css.wrapper}>
-      <div ref={padWrapperRef} className={css.padWrapper}>
-        <canvas
-          ref={canvasRef}
-          style={{ width: "100%", height: "500px", backgroundColor: "#fff" }}
-        />
+      <div className={css.padWrapper}>
+        <div ref={padWrapperRef} className={css.padContainer}>
+          <canvas
+            ref={canvasRef}
+            style={{ width: "100%", height: "500px", backgroundColor: "#fff" }}
+          />
+        </div>
+        <div className={css.layerWrapper}>
+          <h4>Layers</h4>
+          {permanentEllipses.map((item, i) => (
+            <div className={css.layer} key={item.id}>
+              <p>layer: {item.sequence}</p>
+              <a onClick={() => handleDeleteLayer(item.id)}>Delete Layer</a>
+            </div>
+          ))}
+        </div>
       </div>
       <div className={css.optionWrapper}>
         <button
