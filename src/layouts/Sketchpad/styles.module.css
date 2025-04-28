@@ -1,0 +1,13 @@
+.wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+
+.padWrapper {
+	width: 100%;
+	background-color: #fff;
+	border-radius: 16px;
+	
+}
