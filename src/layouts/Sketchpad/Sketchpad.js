@@ -137,10 +137,16 @@ export default function Sketchpad() {
           className={isActive ? css.activebtn : ""}
           onClick={() => {
             setIsActive(!isActive);
-            console.log(isActive);
           }}
         >
           {isActive ? "Deactivate Drawing Mode" : "Activate Drawing Mode"}
+        </button>
+        <button
+          onClick={() => {
+            setPermanentEllipses([]);
+          }}
+        >
+          Delete All Circles
         </button>
       </div>
     </div>
