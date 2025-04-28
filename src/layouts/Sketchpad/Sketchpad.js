@@ -23,6 +23,43 @@ export default function Sketchpad() {
     setPermanentEllipses(newPermEllips);
   }
 
+  function handleAnimate() {
+    const canvas = canvasRef.current;
+    const wrapper = padWrapperRef.current;
+
+    if (canvas && wrapper) {
+      const rect = wrapper.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+
+      const ctx = canvas.getContext("2d");
+      redrawAll(ctx);
+
+      function drawEllipse(ctx, points, color) {
+        ctx.fillStyle = color;
+        points.forEach(([x, y], i) => {
+          setTimeout(() => {
+            ctx.fillRect(x, y, 1, 1);
+          }, i * 5); // delay increases with index
+        });
+      }
+
+      function redrawAll(ctx, previewPoints = null) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw all saved circles
+        permanentEllipses.forEach(({ points, color }) => {
+          drawEllipse(ctx, points, color);
+        });
+
+        // Draw preview if exists
+        if (previewPoints) {
+          drawEllipse(ctx, previewPoints, "gray");
+        }
+      }
+    }
+  }
+
   useEffect(() => {
     if (!isActive) return;
     const canvas = canvasRef.current;
@@ -181,6 +218,7 @@ export default function Sketchpad() {
         >
           Delete All Circles
         </button>
+        <button onClick={handleAnimate}>Animate</button>
         <label
           className={css.colorLabel}
           htmlFor='colorinput'
