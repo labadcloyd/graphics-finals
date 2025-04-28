@@ -13,6 +13,7 @@ export default function Sketchpad() {
   const [isActive, setIsActive] = useState(false);
   const [layerCount, setLayerCount] = useState(0);
   const [permanentEllipses, setPermanentEllipses] = useState([]);
+  const [activeColor, setActiveColor] = useState("#000");
 
   function handleDeleteLayer(id) {
     const newPermEllips = [];
@@ -43,7 +44,7 @@ export default function Sketchpad() {
         };
       }
 
-      function drawEllipse(ctx, points, color = "black") {
+      function drawEllipse(ctx, points, color) {
         ctx.fillStyle = color;
         points.forEach(([x, y]) => {
           ctx.fillRect(x, y, 1, 1);
@@ -54,8 +55,8 @@ export default function Sketchpad() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         // Draw all saved circles
-        permanentEllipses.forEach(({ points }) => {
-          drawEllipse(ctx, points, "black");
+        permanentEllipses.forEach(({ points, color }) => {
+          drawEllipse(ctx, points, color);
         });
 
         // Draw preview if exists
@@ -102,7 +103,12 @@ export default function Sketchpad() {
         setLayerCount(layerCount + 1);
         setPermanentEllipses((prev) => [
           ...prev,
-          { points: finalPoints, id: uuidv4(), sequence: layerCount },
+          {
+            points: finalPoints,
+            id: uuidv4(),
+            sequence: layerCount,
+            color: activeColor,
+          },
         ]);
       }
 
@@ -125,11 +131,11 @@ export default function Sketchpad() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Draw all saved circles
-      permanentEllipses.forEach(({ points }) => {
-        drawEllipse(ctx, points, "black");
+      permanentEllipses.forEach(({ points, color }) => {
+        drawEllipse(ctx, points, color);
       });
 
-      function drawEllipse(ctx, points, color = "black") {
+      function drawEllipse(ctx, points, color) {
         ctx.fillStyle = color;
         points.forEach(([x, y]) => {
           ctx.fillRect(x, y, 1, 1);
@@ -173,6 +179,21 @@ export default function Sketchpad() {
         >
           Delete All Circles
         </button>
+        <label
+          className={css.colorLabel}
+          htmlFor='colorinput'
+          style={{ backgroundColor: activeColor }}
+        >
+          Color
+        </label>
+        <input
+          type='color'
+          className={css.colorInput}
+          id='colorinput'
+          onChange={(e) => {
+            setActiveColor(e.currentTarget.value);
+          }}
+        />
       </div>
     </div>
   );
