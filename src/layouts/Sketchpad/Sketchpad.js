@@ -155,12 +155,14 @@ export default function Sketchpad() {
         </div>
         <div className={css.layerWrapper}>
           <h4>Layers</h4>
-          {permanentEllipses.map((item, i) => (
-            <div className={css.layer} key={item.id}>
-              <p>layer: {item.sequence}</p>
-              <a onClick={() => handleDeleteLayer(item.id)}>Delete Layer</a>
-            </div>
-          ))}
+          <div className={css.layerContainer}>
+            {permanentEllipses.map((item, i) => (
+              <div className={css.layer} key={item.id}>
+                <p>layer: {item.sequence}</p>
+                <a onClick={() => handleDeleteLayer(item.id)}>Delete Layer</a>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <div className={css.optionWrapper}>
