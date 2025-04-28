@@ -8,6 +8,8 @@ export default function Sketchpad() {
   const padWrapperRef = useRef(null);
 
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [permanentEllipses, setPermanentEllipses] = useState([]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -28,12 +30,36 @@ export default function Sketchpad() {
         };
       }
 
+      function drawEllipse(ctx, points, color = "black") {
+        ctx.fillStyle = color;
+        points.forEach(([x, y]) => {
+          ctx.fillRect(x, y, 1, 1);
+        });
+      }
+
+      function redrawAll(ctx, previewPoints = null) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw all saved circles
+        permanentEllipses.forEach(({ points }) => {
+          drawEllipse(ctx, points, "black");
+        });
+
+        // Draw preview if exists
+        if (previewPoints) {
+          drawEllipse(ctx, previewPoints, "gray");
+        }
+      }
+
       function handleMouseDown(e) {
         const pos = getMousePos(e);
         setStartPos(pos);
+        setIsDrawing(true);
       }
 
-      function handleMouseUp(e) {
+      function handleMouseMove(e) {
+        if (!isDrawing) return;
+
         const endPos = getMousePos(e);
 
         const xc = (startPos.x + endPos.x) / 2;
@@ -41,33 +67,66 @@ export default function Sketchpad() {
         const rx = Math.abs(endPos.x - startPos.x) / 2;
         const ry = Math.abs(endPos.y - startPos.y) / 2;
 
-        const points = midpointEllipse(rx, ry, xc, yc);
-        drawEllipse(ctx, points);
+        const previewPoints = midpointEllipse(rx, ry, xc, yc);
+
+        redrawAll(ctx, previewPoints);
       }
 
-      function drawEllipse(ctx, points) {
-        ctx.fillStyle = "black";
-        points.forEach(([x, y]) => {
-          ctx.fillRect(x, y, 1, 1);
-        });
+      function handleMouseUp(e) {
+        if (!isDrawing) return;
+        setIsDrawing(false);
+
+        const endPos = getMousePos(e);
+
+        const xc = (startPos.x + endPos.x) / 2;
+        const yc = (startPos.y + endPos.y) / 2;
+        const rx = Math.abs(endPos.x - startPos.x) / 2;
+        const ry = Math.abs(endPos.y - startPos.y) / 2;
+
+        const finalPoints = midpointEllipse(rx, ry, xc, yc);
+
+        // Save the final ellipse to permanentEllipses
+        setPermanentEllipses((prev) => [...prev, { points: finalPoints }]);
       }
 
       canvas.addEventListener("mousedown", handleMouseDown);
+      canvas.addEventListener("mousemove", handleMouseMove);
       canvas.addEventListener("mouseup", handleMouseUp);
 
       return () => {
         canvas.removeEventListener("mousedown", handleMouseDown);
+        canvas.removeEventListener("mousemove", handleMouseMove);
         canvas.removeEventListener("mouseup", handleMouseUp);
       };
     }
-  }, [startPos]);
+  }, [isDrawing, startPos, permanentEllipses]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    if (canvas) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw all saved circles
+      permanentEllipses.forEach(({ points }) => {
+        drawEllipse(ctx, points, "black");
+      });
+
+      function drawEllipse(ctx, points, color = "black") {
+        ctx.fillStyle = color;
+        points.forEach(([x, y]) => {
+          ctx.fillRect(x, y, 1, 1);
+        });
+      }
+    }
+  }, [permanentEllipses]);
 
   return (
     <div className={css.wrapper}>
       <div ref={padWrapperRef} className={css.padWrapper}>
         <canvas
           ref={canvasRef}
-          style={{ width: "100%", height: "100%", backgroundColor: "#fff" }}
+          style={{ width: "100%", height: "500px", backgroundColor: "#fff" }}
         />
       </div>
     </div>
