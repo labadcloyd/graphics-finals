@@ -9,9 +9,11 @@ export default function Sketchpad() {
 
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [isDrawing, setIsDrawing] = useState(false);
+  const [isActive, setIsActive] = useState(false);
   const [permanentEllipses, setPermanentEllipses] = useState([]);
 
   useEffect(() => {
+    if (!isActive) return;
     const canvas = canvasRef.current;
     const wrapper = padWrapperRef.current;
 
@@ -21,6 +23,7 @@ export default function Sketchpad() {
       canvas.height = rect.height;
 
       const ctx = canvas.getContext("2d");
+      redrawAll(ctx);
 
       function getMousePos(e) {
         const rect = canvas.getBoundingClientRect();
@@ -99,7 +102,7 @@ export default function Sketchpad() {
         canvas.removeEventListener("mouseup", handleMouseUp);
       };
     }
-  }, [isDrawing, startPos, permanentEllipses]);
+  }, [isDrawing, startPos, permanentEllipses, isActive]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -128,6 +131,17 @@ export default function Sketchpad() {
           ref={canvasRef}
           style={{ width: "100%", height: "500px", backgroundColor: "#fff" }}
         />
+      </div>
+      <div className={css.optionWrapper}>
+        <button
+          className={isActive ? css.activebtn : ""}
+          onClick={() => {
+            setIsActive(!isActive);
+            console.log(isActive);
+          }}
+        >
+          {isActive ? "Deactivate Drawing Mode" : "Activate Drawing Mode"}
+        </button>
       </div>
     </div>
   );

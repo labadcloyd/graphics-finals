@@ -1,7 +1,9 @@
 .wrapper {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	gap: 20px;
 	width: 100%;
 }
 
@@ -13,4 +15,18 @@
 }
 .padWrapper canvas {
 	border-radius: 16px;
+}
+
+.optionWrapper {
+	width: 100%;
+	display: flex;
+}
+
+.optionWrapper button {
+	padding: 18px 48px; 
+}
+
+.activebtn  {
+	color: #fff;
+	background-color: rgb(204, 65, 65);
 }
