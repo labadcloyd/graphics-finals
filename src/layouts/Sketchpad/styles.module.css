@@ -9,5 +9,8 @@
 	width: 100%;
 	background-color: #fff;
 	border-radius: 16px;
-	
+
+}
+.padWrapper canvas {
+	border-radius: 16px;
 }
