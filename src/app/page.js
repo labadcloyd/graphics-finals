@@ -1,5 +1,5 @@
 import styles from "./page.module.css";
-import { Navbar, Sketchpad } from "@/layouts";
+import { Footer, Navbar, Sketchpad } from "@/layouts";
 
 export default function Home() {
   return (
@@ -8,6 +8,7 @@ export default function Home() {
       <div className={styles.container}>
         <Sketchpad></Sketchpad>
       </div>
+      <Footer />
     </div>
   );
 }

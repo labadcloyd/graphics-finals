@@ -1,0 +1,19 @@
+.wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	width: 100%;
+	background-color: #fff;
+}
+.container {
+	padding: 12px 0;
+	width: 100%;
+	max-width: 1080px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.wrapper p {
+	font-size: 12px;
+}
