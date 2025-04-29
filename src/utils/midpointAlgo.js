@@ -5,18 +5,15 @@ function midpointEllipse(rx, ry, xc, yc) {
   let x = 0;
   let y = ry;
 
-  // Initial decision parameters
   let rxSq = rx * rx;
   let rySq = ry * ry;
   let twoRxSq = 2 * rxSq;
   let twoRySq = 2 * rySq;
 
-  // Initial decision parameter for Region 1
   let p1 = rySq - rxSq * ry + 0.25 * rxSq;
   let dx = twoRySq * x;
   let dy = twoRxSq * y;
 
-  // Region 1
   while (dx < dy) {
     plotEllipsePoints(points, xc, yc, x, y);
 
@@ -33,11 +30,9 @@ function midpointEllipse(rx, ry, xc, yc) {
     }
   }
 
-  // Initial decision parameter for Region 2
   let p2 =
     rySq * (x + 0.5) * (x + 0.5) + rxSq * (y - 1) * (y - 1) - rxSq * rySq;
 
-  // Region 2
   while (y >= 0) {
     plotEllipsePoints(points, xc, yc, x, y);
 
