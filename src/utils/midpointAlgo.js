@@ -1,3 +1,4 @@
+// Developed by Parker Manalaysay
 function midpointEllipse(rx, ry, xc, yc) {
   const points = [];
 
