@@ -7,7 +7,16 @@ export default function Navbar() {
           <h4>Sketchpad</h4>
           <p>Midpoint Ellipse</p>
         </div>
-        <div></div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-end",
+            flexDirection: "column",
+          }}
+        >
+          <h4>Cloyd Abad - Parker Manalaysay</h4>
+          <p>Developers</p>
+        </div>
       </div>
     </div>
   );
