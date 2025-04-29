@@ -11,7 +11,7 @@ export default function Sketchpad() {
 
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [isDrawing, setIsDrawing] = useState(false);
-  const [isActive, setIsActive] = useState(false);
+  const [isActive, setIsActive] = useState(true);
   const [layerCount, setLayerCount] = useState(0);
   const [permanentEllipses, setPermanentEllipses] = useState([]);
   const [activeColor, setActiveColor] = useState("#000");
